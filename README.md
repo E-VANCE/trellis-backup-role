@@ -19,7 +19,7 @@ Add the role and its dependencies to the `galaxy.yml` file of Trellis :
 ```yaml
 - name: backup
   src: xilonz.trellis_backup
-  version: 2.1.7
+  version: 2.2.0
 ```
 
 Run `ansible-galaxy install -r galaxy.yml` to install the new roles.
