@@ -4,7 +4,7 @@
     author: Arjan Steenbergen
     description: Install automated backups on Trellis using duply
     license: "MIT"
-    min_ansible_version: 2.2
+    min_ansible_version: 2.11
     platforms:
     - name: Ubuntu
       versions:
