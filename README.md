@@ -17,8 +17,8 @@ It does not backup website code. If you need to restore, you must first deploy y
 Add the role and its dependencies to the `galaxy.yml` file of Trellis :
 
 ```yaml
-- name: backup
-  src: xilonz.trellis_backup
+- name: trellis-backup
+  src: https://github.com/E-VANCE/trellis-backup-role
   version: 2.2.0
 ```
 
@@ -29,7 +29,7 @@ Then, add the roles to the `server.yml` :
 ```yaml
 roles:
   ... other Trellis roles ...
-  - { role: backup, tags: [backup] }
+  - { role: trellis-backup, tags: [backup] }
 ```
 
 ## Role Variables
