@@ -18,4 +18,7 @@
     - duply
     - wordpress
   dependencies:
-  - lafranceinsoumise.backup
+  # Pin dependency to a commit that uses include_tasks instead of deprecated include
+  - name: lafranceinsoumise.backup
+    src: https://github.com/lafranceinsoumise/ansible-backup
+    version: e13bf363d5705e70d4b22c432c053c1368ecfa16
