@@ -42,7 +42,7 @@
   register: backup_jobs
 
 - name: Configure backup jobs
-  when: site_uses_backup
+  when: backup_jobs.results | selectattr('ansible_facts', 'defined') | list | length > 0
   set_fact:
     backup_profiles: >-
       {{
@@ -60,3 +60,25 @@
 - name: Run backup role
   include_role:
     name: "lafranceinsoumise.backup"
+  vars:
+    # The role's own cron task and duplicity version check use non-boolean `when` conditions,
+    # which fail on ansible-core 2.19+. The cron entries are created by the next task instead.
+    backup_cron: false
+    backup_duplicity_version: "{{ trellis_backup_duplicity_version | default(false) }}"
+  when: backup_profiles | default([]) | length > 0
+
+- name: Setup backup cron jobs
+  cron:
+    cron_file: duply_backup
+    user: "{{ item.user | default(backup_user) }}"
+    job: /usr/bin/duply {{ backup_home | default('/etc/duply') }}/{{ item.name }} {{ item.action | default('backup') }} >> {{ backup_logdir | default('/var/log/duply') }}/{{ item.name }}.log 2>&1
+    minute: "{{ item.schedule.split(' ')[0] }}"
+    hour: "{{ item.schedule.split(' ')[1] }}"
+    day: "{{ item.schedule.split(' ')[2] }}"
+    month: "{{ item.schedule.split(' ')[3] }}"
+    weekday: "{{ item.schedule.split(' ')[4] }}"
+    name: "{{ item.name }}"
+  loop: "{{ backup_profiles | default([]) }}"
+  loop_control:
+    label: "{{ item.name }}"
+  when: (item.schedule | default('')) | length > 0

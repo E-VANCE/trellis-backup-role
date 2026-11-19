@@ -19,6 +19,9 @@
     - wordpress
   dependencies:
   # Pin dependency to a commit that uses include_tasks instead of deprecated include
+  # Installed for the include in tasks/main.yml, but not run on its own: it would run without our vars
   - name: lafranceinsoumise.backup
     src: https://github.com/lafranceinsoumise/ansible-backup
     version: e13bf363d5705e70d4b22c432c053c1368ecfa16
+    vars:
+      backup_enabled: false
